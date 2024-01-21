@@ -1,17 +1,14 @@
-import onnxruntime as ort
 import numpy as np
 import cv2
 import time
 import os
+import onnxruntime as ort
 
-model_path = './lenet.onnx'
 time_start = time.time()
+model_path = './lenet.onnx'
 session = ort.InferenceSession(model_path)
-time_end = time.time()
-print('time cost: {}'.format(time_end - time_start))
 
 image_folder = './Data/mnist_images'
-time_start = time.time()
 for filename in os.listdir(image_folder):
     picture_path = os.path.join(image_folder, filename)
     image = cv2.imread(picture_path)
@@ -30,7 +27,7 @@ for filename in os.listdir(image_folder):
     output_tensor = result[0]
     output_array = np.squeeze(output_tensor)
     predict_label = np.argmax(output_array)
-    # print('predict label: {}'.format(predict_label))
+    print('predict label: {}'.format(predict_label))
     
 time_end = time.time()
 print('time cost: {}'.format(time_end - time_start))

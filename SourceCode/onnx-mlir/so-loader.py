@@ -1,20 +1,23 @@
 import numpy as np
 import cv2
-import os
+
 import time
-from multiprocessing import Pool
-import multiprocessing
+import os
 from PyRuntime import OMExecutionSession
 
-def init_model():
-    global session
-    model = './lenet.so'
-    time_start = time.time()
-    session = OMExecutionSession(model, use_default_entry_point=True)
-    time_end = time.time()
-    print('time cost: {}'.format(time_end - time_start))
+time_start = time.time()
+model = './lenet.so'
+session = OMExecutionSession(model, use_default_entry_point=True)
+time_end = time.time()
+print('time cost: {}'.format(time_end - time_start))
 
-def run_inference(filename):
+
+image_folder = './Data/mnist_images'
+filenames = os.listdir(image_folder)
+
+start = time.time()
+
+for filename in filenames:
     picture_path = os.path.join(image_folder, filename)
     img = cv2.imread(picture_path)
     input = np.array(img[:,:,0], np.dtype(np.float32))
@@ -24,17 +27,7 @@ def run_inference(filename):
     predict_label = np.argmax(output_array)
     # print('predict label: {}'.format(predict_label))
 
-if __name__ == '__main__':
-    image_folder = './Data/mnist_images'
-    filenames = os.listdir(image_folder)
+end = time.time()
 
-    num_processes = multiprocessing.cpu_count()
-    pool = Pool(processes=num_processes, initializer=init_model)
-
-    time_start = time.time()
-    pool.map(run_inference, filenames)
-    pool.close()
-    pool.join()
-    time_end = time.time()
-
-    print('time cost: {}'.format(time_end - time_start))
+print("time execute: ")
+print(end-start)

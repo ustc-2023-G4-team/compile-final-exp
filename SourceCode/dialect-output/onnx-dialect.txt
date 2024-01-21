@@ -1,0 +1,8 @@
+module {
+  func @ADD ( %arg0 :tensor <3x1440x1080xi32> , %arg1 : tensor <3x1440x1080xi32>) -> tensor <* xi32 > {
+  %0 = " onnx . Add "( %arg0 , %arg1 ) : (tensor <3x1440x1080xi32> , tensor <3x1440x1080xi32>) -> tensor <* xi32 >
+  std . return %0 : tensor <* xi32 >
+  }
+" onnx . EntryPoint "() { func = @ADD , numInputs = 2 : i32 , numOutputs = 1 : i32 } : () -> ()
+}
+
